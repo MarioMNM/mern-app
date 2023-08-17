@@ -1,14 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate 
+} from "react-router-dom";
+
+import Users from './user/pages/Users';
+import NewPlace from './places/pages/NewPlace';
+
+const App = () => {
   return (
-    <div className>
-      <header className="App-header">
-        React App!
-      </header>
-    </div>
+   <Router>
+     <Routes>
+       <Route path="/" element={<Users/>}/>
+       <Route path="/places/new" element={<NewPlace />} />
+       <Route path="/*" element={<Navigate to="/" replace />} />
+     </Routes>
+   </Router>
   );
-}
+};
 
 export default App;
