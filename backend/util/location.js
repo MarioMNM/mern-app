@@ -1,7 +1,7 @@
 const HttpError = require("../models/http-errors");
 const axios = require("axios");
 
-const API_KEY = "";
+const API_KEY = process.env.API_KEY;
 
 async function getCoordsForAddress(address) {
   const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
