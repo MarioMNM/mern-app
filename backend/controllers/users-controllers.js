@@ -4,21 +4,6 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-errors");
 const User = require("../models/user");
 
-let DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "Mario Novella",
-    email: "test@test.com",
-    password: "foobar",
-  },
-  {
-    id: "u33",
-    name: "El Nano",
-    email: "nano@nano.com",
-    password: "elnano",
-  },
-];
-
 const getUsers = async (req, res, next) => {
   let users;
   try {
@@ -57,7 +42,7 @@ const signup = async (req, res, next) => {
     return next(new HttpError("Invalid body.", 400));
   }
 
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
   try {
@@ -77,7 +62,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    places,
+    places: [],
     image:
       "https://static.wikia.nocookie.net/3c88a0ab-fea5-432e-b1a9-69fd90d81273",
   });
