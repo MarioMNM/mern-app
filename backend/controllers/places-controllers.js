@@ -82,7 +82,7 @@ const createPlace = async (req, res, next) => {
     address,
     location: coordinates,
     image:
-      "https://static.wikia.nocookie.net/3c88a0ab-fea5-432e-b1a9-69fd90d81273",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
     creator,
   });
 
