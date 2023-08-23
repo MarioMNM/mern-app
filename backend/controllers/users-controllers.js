@@ -33,7 +33,10 @@ const login = async (req, res, next) => {
     return next(new HttpError("Invalid credentials, please try again.", 401));
   }
 
-  res.json({ message: "Logged in!" });
+  res.json({
+    message: "Logged in!",
+    user: identifiedUser.toObject({ getters: true }),
+  });
 };
 
 const signup = async (req, res, next) => {
