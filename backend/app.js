@@ -12,6 +12,16 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
+
 app.use("/api/places", placesRoutes);
 
 app.use("/api/users", usersRoutes);
@@ -35,7 +45,7 @@ const db_password = process.env.db_password;
 
 mongoose
   .connect(
-    `mongodb+srv://${db_username}:${db_password}@mern-app.7edxiik.mongodb.net/places?retryWrites=true&w=majority`
+    `mongodb+srv://${db_username}:${db_password}@mern-app.7edxiik.mongodb.net/mern-dev?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(5000);

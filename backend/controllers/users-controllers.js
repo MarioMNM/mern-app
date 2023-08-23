@@ -30,7 +30,7 @@ const login = async (req, res, next) => {
   }
 
   if (!identifiedUser || identifiedUser.password !== password) {
-    return next(new HttpError("Wrong credentials.", 401));
+    return next(new HttpError("Invalid credentials, please try again.", 401));
   }
 
   res.json({ message: "Logged in!" });
