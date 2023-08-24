@@ -33,7 +33,7 @@ const PlaceItem = (props) => {
     try {
       await sendRequest(
         `http://localhost:5000/api/places/${props.id}`,
-        "DELETE",
+        "DELETE"
       );
       props.onDelete(props.id);
     } catch (err) {}
@@ -73,9 +73,12 @@ const PlaceItem = (props) => {
       </Modal>
       <li className="place-item">
         <Card>
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
-            <img src={props.image} alt={props.title} />
+            <img
+              src={`http://localhost:5000/${props.image}`}
+              alt={props.title}
+            />
           </div>
           <div className="place-item__info">
             <h2>{props.title}</h2>
