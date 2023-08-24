@@ -1,8 +1,12 @@
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-errors");
 const User = require("../models/user");
+
+const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY;
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -29,14 +33,41 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  if (!identifiedUser || identifiedUser.password !== password) {
-    return next(new HttpError("Invalid credentials, please try again.", 401));
+  if (!identifiedUser) {
+    return next(new HttpError("Email does not exist, please try again.", 401));
   }
 
-  res.json({
-    message: "Logged in!",
-    user: identifiedUser.toObject({ getters: true }),
-  });
+  let isValidPassword = false;
+  try {
+    isValidPassword = await bcrypt.compare(password, identifiedUser.password);
+  } catch (err) {
+    const error = new HttpError("Something went wrong, please try again.", 500);
+    return next(error);
+  }
+
+  if (!isValidPassword) {
+    const error = new HttpError(
+      "Invalid password for the given email, please try again.",
+      404
+    );
+    return next(error);
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: identifiedUser.id, iat: Math.floor(Date.now() / 1000) },
+      JWT_PRIVATE_KEY,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new HttpError("Something went wrong, please try again.", 500);
+    return next(error);
+  }
+
+  res
+    .status(200)
+    .json({ userId: identifiedUser.id, email: identifiedUser.email, token });
 };
 
 const signup = async (req, res, next) => {
@@ -61,10 +92,21 @@ const signup = async (req, res, next) => {
     );
   }
 
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError(
+      "Could not create user, password encryption failed.",
+      500
+    );
+    return next(error);
+  }
+
   const createdUser = new User({
     name,
     email,
-    password,
+    password: hashedPassword,
     places: [],
     image: req.file.path,
   });
@@ -76,7 +118,21 @@ const signup = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, iat: Math.floor(Date.now() / 1000) },
+      JWT_PRIVATE_KEY,
+      { expiresIn: "1h" }
+    );
+  } catch (err) {
+    const error = new HttpError("Something went wrong, please try again.", 500);
+    return next(error);
+  }
+
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token });
 };
 
 exports.getUsers = getUsers;
