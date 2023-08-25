@@ -95,9 +95,11 @@ const NewPlace = () => {
           onInput={inputHandler}
           errorText="Please provide a valid image."
         />
-        <Button type="submit" disabled={!formState.isValid}>
-          ADD PLACE
-        </Button>
+        <div className="center">
+          <Button type="submit" disabled={!formState.isValid} >
+            ADD PLACE
+          </Button>
+        </div>
       </form>
     </React.Fragment>
   );
