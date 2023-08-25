@@ -11,7 +11,7 @@ const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY;
 const getUsers = async (req, res, next) => {
   let users;
   try {
-    users = await User.find({}, "--password");
+    users = await User.find({}, "-password");
   } catch (err) {
     const error = new HttpError("Something went wrong, please try again.", 500);
     return next(error);

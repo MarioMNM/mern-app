@@ -58,7 +58,15 @@ const ImageUpload = (props) => {
           PICK IMAGE
         </Button>
       </div>
-      {!isValid && <p>{props.errorText}</p>}
+      <div
+        className={`form-control ${
+          !isValid && "form-control--invalid"
+        }`}
+      >
+        {!isValid && (
+          <p className={`${props.center && "center"}`}>{props.errorText}</p>
+        )}
+      </div>
     </div>
   );
 };

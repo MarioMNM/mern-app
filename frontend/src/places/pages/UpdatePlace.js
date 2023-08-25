@@ -48,9 +48,10 @@ const UpdatePlace = () => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
-      navigate("/" + auth.userId + '/places');
+      navigate("/" + auth.userId + "/places");
     } catch (err) {}
   };
 
