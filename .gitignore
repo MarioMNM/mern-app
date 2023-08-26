@@ -17,7 +17,10 @@ node_modules
 /build
 
 # misc
+./backend/nodemon.json
+nodemon.json
 .env
+.env.production
 .DS_Store
 .env.local
 .env.development.local

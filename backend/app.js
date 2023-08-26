@@ -4,8 +4,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-require("dotenv").config();
-
 const createImageFolder = require("./util/imageFolder");
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -53,12 +51,9 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-const db_username = process.env.db_username;
-const db_password = process.env.db_password;
-
 mongoose
   .connect(
-    `mongodb+srv://${db_username}:${db_password}@mern-app.7edxiik.mongodb.net/mern-dev?retryWrites=true&w=majority`
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@mern-app.7edxiik.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(5000);
